@@ -3,3 +3,6 @@
 .env
 *.ps1
 /*/__pycache__
+*.jpeg
+*.jpg
+*.pngs
