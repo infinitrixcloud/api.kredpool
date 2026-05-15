@@ -22,18 +22,18 @@ const storage = multer.diskStorage({
 
 
 const fileFilter: multer.Options["fileFilter"] = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/pdf"];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only JPG, JPEG, PNG files are allowed"));
+    cb(new Error("Only JPG, JPEG, PNG, PDF files are allowed"));
   }
 };
 
 
 const limits: multer.Options["limits"] = {
-  fileSize: 50 * 1024 * 1024, // 5MB
+  fileSize: 500 * 1024 * 1024, // 500MB
 };
 
 

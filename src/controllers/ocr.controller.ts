@@ -40,9 +40,13 @@ export const ocrController = async (
       const form = new FormData();
       form.append("file", fs.createReadStream(outputPath));
 
-      const response = await axios.post("http://127.0.0.1:8000/ocr", form, {
-        headers: form.getHeaders(),
-      });
+      const response = await axios.post(
+        process.env.OCR_URL || "http://127.0.0.1:8000/ocr",
+        form,
+        {
+          headers: form.getHeaders(),
+        },
+      );
 
       const ocrRaw = response.data.result;
 

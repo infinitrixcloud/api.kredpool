@@ -36,7 +36,7 @@ export const panOCRController = async (req: Request, res: Response): Promise<voi
       form.append("file", fs.createReadStream(outputPath));
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/ocr",
+        process.env.OCR_URL || "http://127.0.0.1:8000/ocr",
         form,
         { headers: form.getHeaders() }
       );
@@ -105,20 +105,29 @@ const ignoreWords = [
 ];
 
 
-for (let i = 0; i < cleanedText.length; i++) {
-  if (/name/i.test(cleanedText[i])) {
-    const next = cleanedText[i + 1];
-
-    if (
-      next &&
-      /^[A-Z\s]+$/.test(next) &&   
-      !/\d/.test(next)
-    ) {
-      name = next;
-      break;
+    for (let i = 0; i < cleanedText.length; i++) {
+      if (/^name$/i.test(cleanedText[i]) || /name/i.test(cleanedText[i])) {
+        let nameParts: string[] = [];
+        let j = i + 1;
+        while (
+          j < cleanedText.length &&
+          /^[A-Z\s\.]+$/.test(cleanedText[j].toUpperCase()) &&
+          !/\d/.test(cleanedText[j]) &&
+          !ignoreWords.some(word => {
+             const cleanLine = cleanedText[j].toUpperCase().replace(/[^A-Z]/g, "");
+             const cleanWord = word.toUpperCase().replace(/[^A-Z]/g, "");
+             return cleanLine.includes(cleanWord);
+          })
+        ) {
+          nameParts.push(cleanedText[j]);
+          j++;
+        }
+        if (nameParts.length > 0) {
+          name = nameParts.join(" ");
+          break;
+        }
+      }
     }
-  }
-}
 
 if (!name) {
   name = cleanedText.find((t, i) => {

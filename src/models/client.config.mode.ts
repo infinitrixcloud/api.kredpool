@@ -1,6 +1,7 @@
 export class CLIENTS {
   id!: number;
   client_name!: string;
+  api_key!: string;
   current_balance!: number;
 }
 
