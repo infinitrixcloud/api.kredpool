@@ -30,6 +30,9 @@ function startServer() {
   server.listen(PORT, () => {
     log(`Server listening on port ${PORT}`, "info");
   });
+  server.timeout = 300000; // 5 minutes
+server.headersTimeout = 60000;
+server.requestTimeout = 300000;
 
   server.on("error", (err: any) => {
     log(`Server error: ${err.code ?? ""} ${err.message}`, "error");

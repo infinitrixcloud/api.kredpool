@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { ocrController } from "../controllers/ocr.controller";
 import { panOCRController } from "../controllers/panOCR.controller";
-import { 
-  sendAadhaarOtpController, 
-  verifyAadhaarOtpController 
+import {
+  sendAadhaarOtpController,
+  verifyAadhaarOtpController
 } from "../controllers/aadhaarverify.controller";
 import { panVerifyController } from "../controllers/panverify.controller";
 import { upload } from "../middlewares/multer.middleware"
+import { bankStatementOCrController } from "../controllers/bank_statement.controller";
+
 import { authMiddleware } from "../middlewares/auth.middleware";
 
 export const router = Router();
@@ -19,3 +21,5 @@ router.post('/ocr/pan', upload.array('files'), panOCRController)
 router.post('/verify/aadhaar/otp', authMiddleware as any, sendAadhaarOtpController as any)
 router.post('/verify/aadhaar/data', authMiddleware as any, verifyAadhaarOtpController as any)
 router.post('/verify/pan', authMiddleware as any, panVerifyController as any)
+router.post('/ocr/bank-statement', upload.array('images', 2), bankStatementOCrController)
+
